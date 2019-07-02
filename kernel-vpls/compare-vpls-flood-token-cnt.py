@@ -10,7 +10,7 @@ def compare_vpls_flood_token_cnt(vpls_flood_token_cnt, vpls_flood_token_max, **k
         val = 0
         low_thresh = decimal.Decimal(0.8)*vpls_flood_token_max
         high_thresh = decimal.Decimal(0.9)*vpls_flood_token_max
-        if vpls_flood_token_cnt < low_thresh:
+        if vpls_flood_token_cnt <= low_thresh:
             val = 0
         elif vpls_flood_token_cnt > low_thresh and vpls_flood_token_cnt <= high_thresh:
             val = 1
