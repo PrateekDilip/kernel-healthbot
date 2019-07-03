@@ -1,7 +1,7 @@
 /*
  * This rule helps in monitoring system health based on the value of rpf tunnel id count.
  *
- * The sensor used is rpf tunnel id count.
+ * The sensor used is iAgent.
  * If the rpf tunnel id count value is between 80-95%, it is a warning sign.
  * If it is more than 95%, the system is under risk. Else, the system is healthy.
  */

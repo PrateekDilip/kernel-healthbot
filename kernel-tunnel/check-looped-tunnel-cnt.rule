@@ -1,31 +1,31 @@
 /*
- * This rule monitors system health based on looped tunnel count. 
+ * This rule monitors system health based on looped tunnel count.
  *
- * The sensor used is iAgent.
+ * The sensor used is openconfig.
  * The rule throws red alarm if this value is non-zero, else it remains green.
  * If the value remains green, we also check whether consecutive samples are zero. If not, we raise a red alarm
  */
+
 iceberg {
     topic kernel.tunnel {
-        rule check-looped-tunnel-cnt-iagent {
-            sensor looped-tunnel-cnt-sensor {
-                synopsis "looped tunnel count sensor";
-                description "iAgent sensor for looped tunnel count";
-                iAgent {
-                    file looped_tun_cnt.yml;
-                    table loopedTunnelCountTable;
+        rule check-looped-tunnel-cnt {
+            sensor kernel-tunnel-sensor {
+                synopsis "kernel tunnel sensor";
+                description "Open config sensor for looped tunnel count";
+                open-config {
+                    sensor-name /junos/kernel/tunnel;
                     frequency 1m;
                 }
             }
             field looped-tunnel-cnt {
-                sensor looped-tunnel-cnt-sensor {
-                    path looped_tun_cnt;
+                sensor kernel-tunnel-sensor {
+                    path /junos/kernel/tunnel/looped-cnt;
                 }
                 type integer;
                 description "Looped tunnel count";
             }
-            trigger report-looped-tunnel-cnt-iagent {
-                synopsis "Trigger for looped tunnel count, with the sensor being iAgent";
+            trigger report-looped-tunnel-cnt {
+                synopsis "Trigger for looped tunnel count, with the sensor being Open config";
                 description "This trigger helps in monitoring the system health based on the value of the looped tunnel count. If this value is non-zero, we raise a red alarm, else it remains green. If the value remains green, we also check whether consecutive samples are zero. If not, we raise a red alarm";
                 frequency 1m;
                 term looped-tunnel-cnt-eq-0 {
@@ -90,6 +90,7 @@ iceberg {
                         operating-system junos {
                             products EX {
                                 releases 19.3R1 {
+                                    release-support min-supported-release;
                                     platform [ EX9200 EX9251 EX9253 ];
                                 }
                             }
@@ -102,7 +103,7 @@ iceberg {
                             products PTX {
                                 releases 19.3R1 {
                                     release-support min-supported-release;
-                                    platform [ PTX-Series-All PTX-Series-Allset ];
+                                    platform PTX-Series-All;
                                 }
                             }
                         }
