@@ -82,7 +82,7 @@ iceberg {
                     then {
                         status {
                             color green;
-                            message "Unicats token count is below low threshold. Health is good. #Ucst-token-cnt: $vpls-ucst-token-cnt #Max-tokens: $vpls-ucst-token-max";
+                            message "Unicast token count is below low threshold. Health is good. #Ucst-token-cnt: $vpls-ucst-token-cnt #Max-tokens: $vpls-ucst-token-max";
                         }
                     }
                 }
