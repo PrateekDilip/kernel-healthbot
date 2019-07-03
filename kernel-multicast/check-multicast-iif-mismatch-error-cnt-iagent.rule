@@ -38,7 +38,7 @@ iceberg {
                     then {
                         status {
                             color red;
-                            message "Multicast IIF mismatch error count difference betcheck-multicast-iif-mismatch-error-cnt-iagent-iagentween successive samples is greater than 100. Urgent action is required.";
+                            message "Multicast IIF mismatch error count difference between successive samples is greater than 100. Urgent action is required.";
                         }
                     }
                 }
