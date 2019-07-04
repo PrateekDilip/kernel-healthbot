@@ -55,7 +55,6 @@ iceberg {
                         equal-to "$looped-tunnel-cnt" 0;
                         increasing-at-most-by-value "$looped-tunnel-cnt" {
                             value 0;
-                            time-range 1m;
                         }
                     }
                     then {
@@ -70,13 +69,25 @@ iceberg {
                         equal-to "$looped-tunnel-cnt" 0;
                         increasing-at-least-by-value "$looped-tunnel-cnt" {
                             value 1;
-                            time-range 1m;
                         }
                     }
                     then {
                         status {
                             color red;
                             message "Looped tunnel count difference between successive samples is non-zero. Urgent action is required";
+                        }
+                    }
+                }
+                term looped-tunnel-cnt-diff-lt-0 {
+                    when {
+                        increasing-at-least-by-value "$looped-tunnel-cnt" {
+                            value -1;
+                        }
+                    }
+                    then {
+                        status {
+                            color red;
+                            message "Looped tunnel count difference between succesive samples is non-zero";
                         }
                     }
                 }
