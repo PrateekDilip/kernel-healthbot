@@ -63,7 +63,7 @@ iceberg {
                     then {
                         status {
                             color red;
-                            message "Looped tunnel count difference between succesive samples is non-zero";
+                            message "Looped tunnel count difference between successive samples is non-zero";
                         }
                     }
                 }
