@@ -24,6 +24,8 @@ iceberg {
                 description "Multicast Resolve Request Error Count";
             }
             trigger report-resolve-req-error-cnt {
+                synopsis "Trigger for resolve request error count, with open config sensor";
+                description "The trigger monitors the system health, based on the value of the resovle request error count. If this value is greater than 20, red alarm is thrown. If it is between 11-20, yellow alarm is thrown. Else, green alarm is thrown.";
                 frequency 10m;
                 term resolve-request-error-cnt-diff-gt-20 {
                     when {
