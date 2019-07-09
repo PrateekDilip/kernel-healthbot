@@ -13,7 +13,7 @@ iceberg {
                 description "Open config sensor for resolve request error count";
                 open-config {
                     sensor-name /junos/kernel/multicast;
-                    frequency 1m;
+                    frequency 10m;
                 }
             }
             field resolve-request-error-cnt {
@@ -24,6 +24,7 @@ iceberg {
                 description "Multicast Resolve Request Error Count";
             }
             trigger report-resolve-req-error-cnt {
+                frequency 10m;
                 term resolve-request-error-cnt-diff-gt-20 {
                     when {
                         increasing-at-least-by-value "$resolve-request-error-cnt" {
