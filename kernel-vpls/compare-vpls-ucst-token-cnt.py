@@ -10,9 +10,9 @@ def compare_vpls_ucst_token_cnt(vpls_ucst_token_cnt, vpls_ucst_token_max, **kwar
         val = 0
         low_thresh = decimal.Decimal(0.8)*vpls_ucst_token_max
         high_thresh = decimal.Decimal(0.9)*vpls_ucst_token_max
-        if vpls_ucst_token_cnt <= low_thresh:
+        if vpls_ucst_token_cnt < low_thresh:
             val = 0
-        elif vpls_ucst_token_cnt > low_thresh and vpls_ucst_token_cnt <= high_thresh:
+        elif vpls_ucst_token_cnt >= low_thresh and vpls_ucst_token_cnt <= high_thresh:
             val = 1
         elif vpls_ucst_token_cnt > high_thresh:
             val = 2
