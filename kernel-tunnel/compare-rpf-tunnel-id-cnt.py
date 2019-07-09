@@ -10,9 +10,9 @@ def compare_rpf_tunnel_id_cnt(rpf_tunnel_id_cnt, rpf_tunnel_id_max, **kwargs):
         val = 0
         low_thresh = decimal.Decimal(0.8)*rpf_tunnel_id_max
         high_thresh = decimal.Decimal(0.95)*rpf_tunnel_id_max
-        if rpf_tunnel_id_cnt <= low_thresh:
+        if rpf_tunnel_id_cnt < low_thresh:
             val = 0
-        elif rpf_tunnel_id_cnt > low_thresh  and  rpf_tunnel_id_cnt <= high_thresh:
+        elif rpf_tunnel_id_cnt >= low_thresh  and  rpf_tunnel_id_cnt <= high_thresh:
             val = 1
         elif rpf_tunnel_id_cnt > high_thresh:
             val = 2
