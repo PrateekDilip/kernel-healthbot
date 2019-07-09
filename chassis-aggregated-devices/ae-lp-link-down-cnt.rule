@@ -1,0 +1,90 @@
+/*
+ * This rule checks for AE link protection link down error count at a given
+ * time in the system. It monitors the AE link protection link down error
+ * count and raises an alarm if the counter incremented from the previous
+ * value in ALL the samples.
+ *
+ * The rule checks if the count has increased by 1 from its previous value in
+ * ALL the samples for the last 60 seconds and raises the alarm accordingly.
+ */
+iceberg {
+    topic chassis.aggregated-devices {
+        rule ae-lp-link-down-cnt {
+            synopsis "Detect secondary link failure of AE bundle";
+            description "Detects AE Link Protection link down error count has increased";
+            sensor ae-lp-link-down-cnt-sensor {
+                synopsis "Openconfig sensor for AE link protection link down count";
+                description "Return AE link protection link down count";
+                open-config {
+                    sensor-name /junos/chassis/aggregated-devices;
+                    frequency 1m;
+                }
+            }
+            field ae-lp-link-down-cnt {
+                sensor ae-lp-link-down-cnt-sensor {
+                    path /junos/chassis/aggregated-devices/ae-lp-link-down-cnt;
+                }
+                type integer;
+                description "AE Link Protection link down error count ";
+            }
+            trigger report-ae-lp-link-down-cnt {
+                synopsis "Trigger to check AE link protection link down count";
+                description "Check if AE Link Protection link down error count has increased by minimum 1 from its previous value in ALL the samples";
+                frequency 1m;
+                term ae-lp-link-down-cnt-present {
+                    when {
+                        not-equal-to "$ae-lp-link-down-cnt" 0;
+                        increasing-at-least-by-value "$ae-lp-link-down-cnt" {
+                            value 1;
+                            time-range 140s;
+                            any;
+                        }
+                    }
+                    then {
+                        status {
+                            color yellow;
+                            message "ALERT: AE link protection link down error count incremented by $ae-lp-link-down-cnt;";
+                        }
+                    }
+                }
+                term no-ae-lp-link-down-cnt {
+                    then {
+                        status {
+                            color green;
+                            message "AE link protection link down error count not incremented from its previous value in ALL the samples";
+                        }
+                    }
+                }
+            }
+            rule-properties {
+                version 1;
+                contributor juniper;
+                supported-healthbot-version 1.0.1;
+                supported-devices {
+                    juniper {
+                        operating-system junos {
+                            products EX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform [ EX9200 EX9251 EX9253 ];
+                                }
+                            }
+                            products MX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform [ MX2010 MX2020 MX240 MX480 MX960 VMX ];
+                                }
+                            }
+                            products PTX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform PTX-Series-All;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

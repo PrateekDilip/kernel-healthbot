@@ -1,0 +1,90 @@
+/*
+ * This rule detects PS transport IFL going ccc down. check PS l2circuit CCC down
+ * error count has increased by minimum 1 from its previous value in ALL the
+ * samples
+ *
+ * The rule checks if the count has increased by 1 from its previous value in
+ * ALL the samples for the last 60 seconds and raises the alarm accordingly.
+ */
+
+iceberg {
+    topic chassis.aggregated-devices {
+        rule ps-ifl-ccc-down-cnt {
+            synopsis "Detect PS transport IFL ccc going down";
+            description "Detects PS l2circuit IFL ccc going down";
+            sensor ps-ifl-ccc-down-cnt-sensor {
+                synopsis "openconfig sensor for PS transport IFL ccc down count";
+                description "Return PS transport IFL ccc down count";
+                open-config {
+                    sensor-name /junos/chassis/aggregated-devices;
+                    frequency 1m;
+                }
+            }
+            field ps-ifl-ccc-down-cnt {
+                sensor ps-ifl-ccc-down-cnt-sensor {
+                    path /junos/chassis/aggregated-devices/ps-ifl-ccc-down-cnt;
+                }
+                type integer;
+                description "PS transport IFL ccc down count";
+            }
+            trigger report-ps-ifl-ccc-down-cnt {
+                synopsis "Trigger to check PS l2circuit CCC down count";
+                description "Check if PS l2circuit CCC down error count has increased by minimum 1 from its previous value in ALL the samples";
+                frequency 1m;
+                term ps-ifl-ccc-down-cnt-present {
+                    when {
+                        not-equal-to "$ps-ifl-ccc-down-cnt" 0;
+                        increasing-at-least-by-value "$ps-ifl-ccc-down-cnt" {
+                            value 1;
+                            time-range 140s;
+                            any;
+                        }
+                    }
+                    then {
+                        status {
+                            color red;
+                            message "ALERT: PS transport IFL ccc down count incremented by $ps-ifl-ccc-down-cnt";
+                        }
+                    }
+                }
+                term no-ps-ifl-ccc-down-cnt {
+                    then {
+                        status {
+                            color green;
+                            message "PS transport IFL ccc down count not incremented from its previous value in ALL the samples";
+                        }
+                    }
+                }
+            }
+            rule-properties {
+                version 1;
+                contributor juniper;
+                supported-healthbot-version 1.0.1;
+                supported-devices {
+                    juniper {
+                        operating-system junos {
+                            products EX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform [ EX9200 EX9251 EX9253 ];
+                                }
+                            }
+                            products MX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform [ MX2010 MX2020 MX240 MX480 MX960 VMX ];
+                                }
+                            }
+                            products PTX {
+                                releases 19.3R1 {
+                                    release-support min-supported-release;
+                                    platform PTX-Series-All;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

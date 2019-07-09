@@ -1,0 +1,89 @@
+/*
+ * This rule detects LT interface deletion failure due to stacked IFLs.
+ *
+ * The rule checks if the count has increased by 1 from its previous value in
+ * ALL the samples for the last 60 seconds and raises the alarm accordingly.
+ */
+
+iceberg {
+    topic chassis.aggregated-devices {
+        rule ps-lt-unstack-cnt-iagent {
+            synopsis "Detect LT interface deletion failure due to stacked IFLs";
+            description "Detects LT interface deletion failure due to stacked IFLs";
+            sensor ps-lt-unstack-cnt-sensor {
+                synopsis "iAgent sensor for PS LT unstack error count";
+                description "Return PS LT unstack error count";
+                iAgent {
+                    file ps_lt_unstack_cnt.yml;
+                    table psLtUnstackCountTable;
+                    frequency 1m;
+                }
+            }
+            field ps-lt-unstack-cnt {
+                sensor ps-lt-unstack-cnt-sensor {
+                    path ps_lt_unstack_cnt;
+                }
+                type integer;
+                description "LT interface deletion failure due to stacked IFLs";
+            }
+            trigger report-ps-lt-unstack-cnt-iagent {
+                synopsis "Trigger to check PS LT unstacking error count";
+                description "Check if PS LT unstacking error count has increased by minimum 1 from its previous value in ALL the samples";
+                frequency 1m;
+                term ps-lt-unstack-cnt-present {
+                    when {
+                        not-equal-to "$ps-lt-unstack-cnt" 0;
+                        increasing-at-least-by-value "$ps-lt-unstack-cnt" {
+                            value 1;
+                            time-range 140s;
+                            any;
+                        }
+                    }
+                    then {
+                        status {
+                            color yellow;
+                            message "ALERT: PS LT unstacking error count incremented by $ps-lt-unstack-cnt";
+                        }
+                    }
+                }
+                term no-ps-lt-unstack-cnt {
+                    then {
+                        status {
+                            color green;
+                            message "PS LT unstacking error count not incremented from its previous value in ALL the samples";
+                        }
+                    }
+                }
+            }
+            rule-properties {
+                version 1;
+                contributor juniper;
+                supported-healthbot-version 1.0.1;
+                supported-devices {
+                    juniper {
+                        operating-system junos {
+                            products EX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform [ EX9200 EX9251 EX9253 ];
+                                }
+                            }
+                            products MX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform [ MX2010 MX2020 MX240 MX480 MX960 VMX ];
+                                }
+                            }
+                            products PTX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform PTX-Series-All;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

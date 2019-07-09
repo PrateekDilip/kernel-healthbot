@@ -1,0 +1,90 @@
+/*
+ * This rule detects underlying physical interface deletion failure due to
+ * stacked IFLs. 
+ *
+ * The rule checks if the count has increased by 1 from its previous value in
+ * ALL the samples for the last 60 seconds and raises the alarm accordingly.
+ */
+
+iceberg {
+    topic chassis.aggregated-devices {
+        rule ae-unstack-cnt-iagent {
+            synopsis "Detects underlying physical interface deletion failure due to stacked IFLs";
+            description "Detects underlying physical interface deletion failure due to stacked IFLs";
+            sensor ae-unstack-cnt-sensor {
+                synopsis "iAgent sensor for AE unstacking error count";
+                description "Return AE unstacking error count";
+                iAgent {
+                    file ae_unstack_cnt.yml;
+                    table aeUnstackCountTable;
+                    frequency 1m;
+                }
+            }
+            field ae-unstack-cnt {
+                sensor ae-unstack-cnt-sensor {
+                    path ae_unstack_cnt;
+                }
+                type integer;
+                description "AE unstacking error count";
+            }
+            trigger report-ae-unstack-cnt-iagent {
+                synopsis "Trigger to check AE unstacking error count";
+                description "Check if AE unstacking error count has increased by minimum 1 from its previous value in ALL the samples";
+                frequency 1m;
+                term ae-unstack-cnt-present {
+                    when {
+                        not-equal-to "$ae-unstack-cnt" 0;
+                        increasing-at-least-by-value "$ae-unstack-cnt" {
+                            value 1;
+                            time-range 140s;
+                            any;
+                        }
+                    }
+                    then {
+                        status {
+                            color yellow;
+                            message "ALERT: AE unstacking error count incremented by $ae-unstack-cnt";
+                        }
+                    }
+                }
+                term no-ae-unstack-cnt {
+                    then {
+                        status {
+                            color green;
+                            message "AE unstacking error count not incremented from its previous value in ALL the samples";
+                        }
+                    }
+                }
+            }
+            rule-properties {
+                version 1;
+                contributor juniper;
+                supported-healthbot-version 1.0.1;
+                supported-devices {
+                    juniper {
+                        operating-system junos {
+                            products EX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform [ EX9200 EX9251 EX9253 ];
+                                }
+                            }
+                            products MX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform [ MX2010 MX2020 MX240 MX480 MX960 VMX ];
+                                }
+                            }
+                            products PTX {
+                                releases 18.3R3 {
+                                    release-support min-supported-release;
+                                    platform PTX-Series-All;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
