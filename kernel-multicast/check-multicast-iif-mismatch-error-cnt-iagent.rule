@@ -53,7 +53,7 @@ iceberg {
                     then {
                         status {
                             color yellow;
-                            message "Multicast IIf mismatch error count difference between successive samples is in the range 10-100. Remedial action may be required";
+                            message "Multicast IIF mismatch error count difference between successive samples is in the range 10-100. Remedial action may be required";
                         }
                     }
                 }
