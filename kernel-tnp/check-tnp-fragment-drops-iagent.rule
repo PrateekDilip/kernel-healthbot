@@ -46,6 +46,7 @@ iceberg {
                 }
                 term tnp-frag-drop-cnt-diff-gt-100 {
                     when {
+                        not-equal-to "$tnp-frag-drop-cnt" 0;
                         increasing-at-least-by-value "$tnp-frag-drop-cnt" {
                             value 101;
                         }
