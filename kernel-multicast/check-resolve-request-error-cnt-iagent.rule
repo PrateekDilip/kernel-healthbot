@@ -30,6 +30,7 @@ iceberg {
                 frequency 10m;
                 term resolve-request-error-cnt-diff-gt-20 {
                     when {
+                        not-equal-to "$resolve-request-error-cnt" 0;
                         increasing-at-least-by-value "$resolve-request-error-cnt" {
                             value 21;
                         }
@@ -43,6 +44,7 @@ iceberg {
                 }
                 term resolve-request-error-cnt-diff-gt-10 {
                     when {
+                        not-equal-to "$resolve-request-error-cnt" 0;
                         increasing-at-least-by-value "$resolve-request-error-cnt" {
                             value 11;
                         }
