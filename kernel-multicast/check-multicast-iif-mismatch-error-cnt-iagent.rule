@@ -31,6 +31,7 @@ iceberg {
                 frequency 10m;
                 term iif-mismatch-err-cnt-diff-gt-100 {
                     when {
+                        not-equal-to "$multicast-iif-mismatch-error-cnt" 0;
                         increasing-at-least-by-value "$multicast-iif-mismatch-error-cnt" {
                             value 101;
                         }
@@ -44,6 +45,7 @@ iceberg {
                 }
                 term iif-mismatch-err-cnt-diff-between-vals {
                     when {
+                        not-equal-to "$multicast-iif-mismatch-error-cnt" 0;
                         increasing-at-least-by-value "$multicast-iif-mismatch-error-cnt" {
                             value 11;
                         }
