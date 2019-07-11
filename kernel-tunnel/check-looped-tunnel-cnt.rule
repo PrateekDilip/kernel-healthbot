@@ -39,6 +39,32 @@ iceberg {
                         }
                     }
                 }
+                term looped-tunnel-cnt-diff-nonzero {
+                    when {
+                        equal-to "$looped-tunnel-cnt" 0;
+                        increasing-at-least-by-value "$looped-tunnel-cnt" {
+                            value 1;
+                            time-range 1m;
+                        }
+                    }
+                    then {
+                        status {
+                            color red;
+                            message "Looped tunnel count difference between successive samples is non-zero. Urgent action is required";
+                        }
+                    }
+                }
+                term looped-tunnel-cnt-eq-0 {
+                    when {
+                        equal-to "$looped-tunnel-cnt" 0;
+                    }
+                    then {
+                        status {
+                            color green;
+                            message "Looped tunnel count is zero. No corrective action required.";
+                        }
+                    }
+                }
                 term looped-tunnel-cnt-diff-zero {
                     when {
                         equal-to "$looped-tunnel-cnt" 0;
@@ -64,17 +90,6 @@ iceberg {
                         status {
                             color red;
                             message "Looped tunnel count difference between successive samples is non-zero";
-                        }
-                    }
-                }
-                term looped-tunnel-cnt-eq-0 {
-                    when {
-                        equal-to "$looped-tunnel-cnt" 0;
-                    }
-                    then {
-                        status {
-                            color green;
-                            message "Looped tunnel count is zero. No corrective action required.";
                         }
                     }
                 }
