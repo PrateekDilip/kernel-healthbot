@@ -28,17 +28,6 @@ iceberg {
                 synopsis "Trigger for looped tunnel count, with the sensor being iAgent";
                 description "This trigger helps in monitoring the system health based on the value of the looped tunnel count. If this value is non-zero, we raise a red alarm, else it remains green. If the value remains green, we also check whether consecutive samples are zero. If not, we raise a red alarm";
                 frequency 1m;
-                term looped-tunnel-cnt-nonzero {
-                    when {
-                        not-equal-to "$looped-tunnel-cnt" 0;
-                    }
-                    then {
-                        status {
-                            color red;
-                            message "Looped tunnel count is non-zero. Urgent action is required";
-                        }
-                    }
-                }
                 term looped-tunnel-cnt-diff-nonzero {
                     when {
                         equal-to "$looped-tunnel-cnt" 0;
@@ -51,6 +40,17 @@ iceberg {
                         status {
                             color red;
                             message "Looped tunnel count difference between successive samples is non-zero. Urgent action is required";
+                        }
+                    }
+                }
+                term looped-tunnel-cnt-nonzero {
+                    when {
+                        not-equal-to "$looped-tunnel-cnt" 0;
+                    }
+                    then {
+                        status {
+                            color red;
+                            message "Looped tunnel count is non-zero. Urgent action is required";
                         }
                     }
                 }
