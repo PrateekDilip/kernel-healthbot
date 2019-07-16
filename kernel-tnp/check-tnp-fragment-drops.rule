@@ -34,6 +34,8 @@ iceberg {
                         not-equal-to "$tnp-frag-drop-cnt" 0;
                         increasing-at-least-by-value "$tnp-frag-drop-cnt" {
                             value 1001;
+                            time-range 140s;
+                            any;
                         }
                     }
                     then {
@@ -48,6 +50,8 @@ iceberg {
                         not-equal-to "$tnp-frag-drop-cnt" 0;
                         increasing-at-least-by-value "$tnp-frag-drop-cnt" {
                             value 101;
+                            time-range 140s;
+                            any;
                         }
                     }
                     then {
