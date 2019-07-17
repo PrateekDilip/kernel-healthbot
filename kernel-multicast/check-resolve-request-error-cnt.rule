@@ -32,6 +32,8 @@ iceberg {
                         not-equal-to "$resolve-request-error-cnt" 0;
                         increasing-at-least-by-value "$resolve-request-error-cnt" {
                             value 21;
+                            time-range 1300s;
+                            any;
                         }
                     }
                     then {
@@ -46,6 +48,8 @@ iceberg {
                         not-equal-to "$resolve-request-error-cnt" 0;
                         increasing-at-least-by-value "$resolve-request-error-cnt" {
                             value 11;
+                            time-range 1300s;
+                            any;
                         }
                     }
                     then {
