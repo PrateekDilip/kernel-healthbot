@@ -33,7 +33,7 @@ iceberg {
                         not-equal-to "$multicast-iif-mismatch-error-cnt" 0;
                         increasing-at-least-by-value "$multicast-iif-mismatch-error-cnt" {
                             value 101;
-                            time-range 140s;
+                            time-range 1300s;
                             any;
                         }
                     }
@@ -49,7 +49,7 @@ iceberg {
                         not-equal-to "$multicast-iif-mismatch-error-cnt" 0;
                         increasing-at-least-by-value "$multicast-iif-mismatch-error-cnt" {
                             value 11;
-                            time-range 140s;
+                            time-range 1300s;
                             any;
                         }
                     }
