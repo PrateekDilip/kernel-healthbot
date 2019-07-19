@@ -47,19 +47,27 @@ iceberg {
                     then {
                         status {
                             color red;
-                            message "The looped tunnel count difference between successive samples is non zero. Action must be taken";
+                            message "The looped tunnel count is increasing between successive samples. Action must be taken";
                         }
                     }
                 }
-                term looped-tun-cnt-diff-zero {
+                term looped-tun-cnt-diff-lt-0 {
                     when {
                         equal-to "$looped-tunnel-cnt" 0;
                         increasing-at-most-by-value "$looped-tunnel-cnt-sampling" {
-                            value 0;
+                            value -1;
                             time-range 140s;
                             any;
                         }
                     }
+                    then {
+                        status {
+                            color red;
+                            message "Looped tunnel count is decreasing between successive samples. System must be monitored";
+                        }
+                    }
+                }
+                term looped-tun-cnt-diff-zero {
                     then {
                         status {
                             color green;
