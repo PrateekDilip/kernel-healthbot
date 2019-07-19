@@ -19,7 +19,7 @@ iceberg {
             }
             field looped-tunnel-cnt {
                 reference {
-                    path "/topic[topic-name='kernel.tunnel']/rule[rule-name='check-looped-tunnel-cnt-iagent’]/trigger[trigger-name='report-looped-tunnel-cnt-iagent’]/looped-tunnel-cnt";
+                    path "/topic[topic-name='kernel.tunnel']/rule[rule-name='check-looped-tunnel-cnt-iagent']/trigger[trigger-name='report-looped-tunnel-cnt-iagent’]/looped-tunnel-cnt";
                 }
                 type integer;
                 description  "Looped tunnel count value, for sampling";
