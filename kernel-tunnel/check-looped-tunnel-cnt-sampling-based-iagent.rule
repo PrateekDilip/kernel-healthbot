@@ -53,7 +53,6 @@ iceberg {
                 }
                 term looped-tun-cnt-diff-lt-0 {
                     when {
-                        equal-to "$looped-tunnel-cnt" 0;
                         increasing-at-most-by-value "$looped-tunnel-cnt-sampling" {
                             value -1;
                             time-range 140s;
