@@ -30,23 +30,36 @@ iceberg {
                 synopsis "Trigger for TCP Embryonic connection drops";
                 description "Checks for TCP Embryonic connection drops and raises an alarm";
                 frequency 1m;
+                term no-tcp-connection-drops {
+                    when {
+                        not-equal-to "$tcp-conndrops-cnt" 0;
+                        increasing-at-most-by-value "$tcp-conndrops-cnt" {
+                            value 9;
+                            time-range 140s;
+                        }
+                    }
+                    then {
+                        status {
+                            color green;
+                            message "No Embryonic connection drops detected";
+                        }
+                    }
+                }
                 term tcp-connection-drops-present {
                     when {
                         not-equal-to "$tcp-conndrops-cnt" 0;
                         increasing-at-least-by-value "$tcp-conndrops-cnt" {
                             value 10;
-                            time-range 140s;
-                            any;
                         }
                     }
                     then {
                         status {
                             color yellow;
-                            message "TCP Embryonic connection drops detected.";
+                            message "TCP Embryonic connection drops detected";
                         }
                     }
                 }
-                term no-tcp-connection-drops {
+                term default {
                     then {
                         status {
                             color green;
