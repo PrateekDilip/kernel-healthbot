@@ -27,15 +27,28 @@ iceberg {
             }
             trigger report-rlt-lp-link-down-cnt {
                 synopsis "Trigger to check RLT Link Protection link down error count";
-                description "Check if RLT Link Protection link down error count has increased by minimum 1 from its previous value in ALL the samples";
+                description "Check if RLT Link Protection link down error count has increased by minimum 1 from its previous value";
                 frequency 1m;
+		term no-rlt-lp-link-down-cnt {
+                    when {
+                        not-equal-to "$rlt-lp-link-down-cnt" 0;
+                        increasing-at-most-by-value "$rlt-lp-link-down-cnt" {
+                            value 0;
+                            time-range 140s;
+                        }
+                    }
+                    then {
+                        status {
+                            color green;
+                            message "RLT Link Protection link down error count not incremented from its previous value";
+                        }
+                    }
+                }
                 term rlt-lp-link-down-cnt-present {
                     when {
                         not-equal-to "$rlt-lp-link-down-cnt" 0;
                         increasing-at-least-by-value "$rlt-lp-link-down-cnt" {
                             value 1;
-                            time-range 140s;
-                            any;
                         }
                     }
                     then {
@@ -45,11 +58,11 @@ iceberg {
                         }
                     }
                 }
-                term no-rlt-lp-link-down-cnt {
+                term default {
                     then {
                         status {
                             color green;
-                            message "RLT Link Protection link down error count not incremented from its previous value in ALL the samples";
+                            message "RLT Link Protection link down error count not incremented from its previous value";
                         }
                     }
                 }

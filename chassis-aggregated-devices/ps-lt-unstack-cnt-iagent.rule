@@ -28,7 +28,7 @@ iceberg {
             }
             trigger report-ps-lt-unstack-cnt-iagent {
                 synopsis "Trigger to check PS LT unstacking error count";
-                description "Check if PS LT unstacking error count has increased by minimum 1 from its previous value in ALL the samples";
+                description "Check if PS LT unstacking error count has increased by minimum 1 from its previous value";
                 frequency 1m;
                 term ps-lt-unstack-cnt-present {
                     when {
@@ -50,7 +50,7 @@ iceberg {
                     then {
                         status {
                             color green;
-                            message "PS LT unstacking error count not incremented from its previous value in ALL the samples";
+                            message "PS LT unstacking error count not incremented from its previous value";
                         }
                     }
                 }

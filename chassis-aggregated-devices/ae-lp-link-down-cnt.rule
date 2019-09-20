@@ -29,7 +29,7 @@ iceberg {
             }
             trigger report-ae-lp-link-down-cnt {
                 synopsis "Trigger to check AE link protection link down count";
-                description "Check if AE Link Protection link down error count has increased by minimum 1 from its previous value in ALL the samples";
+                description "Check if AE Link Protection link down error count has increased by minimum 1 from its previous value";
                 frequency 1m;
                 term ae-lp-link-down-cnt-present {
                     when {
@@ -51,7 +51,7 @@ iceberg {
                     then {
                         status {
                             color green;
-                            message "AE link protection link down error count not incremented from its previous value in ALL the samples";
+                            message "AE link protection link down error count not incremented from its previous value";
                         }
                     }
                 }

@@ -30,15 +30,28 @@ iceberg {
             }
             trigger report-ps-ifl-ccc-down-cnt-iagent {
                 synopsis "Trigger to check PS l2circuit CCC down count";
-                description "Check if PS l2circuit CCC down error count has increased by minimum 1 from its previous value in ALL the samples";
+                description "Check if PS l2circuit CCC down error count has increased by minimum 1 from its previous value";
                 frequency 1m;
+		term no-ps-ifl-ccc-down-cnt {
+                    when {
+                        not-equal-to "$ps-ifl-ccc-down-cnt" 0;
+                        increasing-at-most-by-value "$ps-ifl-ccc-down-cnt" {
+                            value 0;
+                            time-range 140s;
+                        }
+                    }
+                    then {
+                        status {
+                            color green;
+                            message "PS transport IFL ccc down count not incremented from its previous value";
+                        }
+                    }
+                }
                 term ps-ifl-ccc-down-cnt-present {
                     when {
                         not-equal-to "$ps-ifl-ccc-down-cnt" 0;
                         increasing-at-least-by-value "$ps-ifl-ccc-down-cnt" {
                             value 1;
-                            time-range 140s;
-                            any;
                         }
                     }
                     then {
@@ -48,14 +61,14 @@ iceberg {
                         }
                     }
                 }
-                term no-ps-ifl-ccc-down-cnt {
+                term default {
                     then {
                         status {
                             color green;
-                            message "PS transport IFL ccc down count not incremented from its previous value in ALL the samples";
+                            message "PS transport IFL ccc down count not incremented from its previous value";
                         }
                     }
-                }
+                }	
             }
             rule-properties {
                 version 1;

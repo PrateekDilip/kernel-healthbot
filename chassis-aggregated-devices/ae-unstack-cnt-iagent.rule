@@ -29,7 +29,7 @@ iceberg {
             }
             trigger report-ae-unstack-cnt-iagent {
                 synopsis "Trigger to check AE unstacking error count";
-                description "Check if AE unstacking error count has increased by minimum 1 from its previous value in ALL the samples";
+                description "Check if AE unstacking error count has increased by minimum 1 from its previous value";
                 frequency 1m;
                 term ae-unstack-cnt-present {
                     when {
@@ -51,7 +51,7 @@ iceberg {
                     then {
                         status {
                             color green;
-                            message "AE unstacking error count not incremented from its previous value in ALL the samples";
+                            message "AE unstacking error count not incremented from its previous value";
                         }
                     }
                 }
