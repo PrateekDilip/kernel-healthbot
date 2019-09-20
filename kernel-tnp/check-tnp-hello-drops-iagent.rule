@@ -45,6 +45,7 @@ iceberg {
                 }
                 term tnp-hello-drop-cnt-diff-between-vals {
                     when {
+                        not-equal-to "$tnp-hello-drop-cnt" 0;
                         increasing-at-most-by-value "$tnp-hello-drop-cnt" {
                             value 100;
                             time-range 1m;
@@ -59,6 +60,7 @@ iceberg {
                 }
                 term tnp-hello-drop-cnt-diff-gt-100 {
                     when {
+                        not-equal-to "$tnp-hello-drop-cnt" 0;
                         increasing-at-least-by-value "$tnp-hello-drop-cnt" {
                             value 101;
                             time-range 1m;

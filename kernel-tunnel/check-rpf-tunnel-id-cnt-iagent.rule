@@ -56,17 +56,6 @@ iceberg {
                 synopsis "Trigger for reporting rpf tunnel id count with IAgent sensor";
                 description "This trigger helps in reporting the health of the system based on the value of rpf tunnel id count. If this value is between 80-95%, it is a warning sign. If it is more than 95%, the system is under risk. Else, the system is healthy.";
                 frequency 1m;
-                term below_low_thresh {
-                    when {
-                        equal-to "$rpf-tunnel-id-cnt-result" 0;
-                    }
-                    then {
-                        status {
-                            color green;
-                            message "Rpf tunnel id count below threshold. No anomaly detected. #rpf-tunnel-id-cnt: $rpf-tunnel-id-cnt #rpf-tunnel-id-max: $rpf-tunnel-id-max";
-                        }
-                    }
-                }
                 term between_low_high_thresh {
                     when {
                         equal-to "$rpf-tunnel-id-cnt-result" 1;
@@ -86,6 +75,14 @@ iceberg {
                         status {
                             color red;
                             message "rpf tunnel id count is above threshold, Monitor system activity. #rpf-tunnel-id-cnt: $rpf-tunnel-id-cnt #rpf-tunnel-id-max: $rpf-tunnel-id-max";
+                        }
+                    }
+                }
+                term below_low_thresh {
+                    then {
+                        status {
+                            color green;
+                            message "Rpf tunnel id count below threshold. No anomaly detected. #rpf-tunnel-id-cnt: $rpf-tunnel-id-cnt #rpf-tunnel-id-max: $rpf-tunnel-id-max";
                         }
                     }
                 }
